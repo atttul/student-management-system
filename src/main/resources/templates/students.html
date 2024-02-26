@@ -1,5 +1,4 @@
-<!doctype html>
-<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -12,6 +11,26 @@
           crossorigin="anonymous">
 </head>
 <body>
+<table class="table table-danger">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th scope="col">email</th>
+        <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody class="table-info">
+    <tr th:each="x:${students}">
+        <td th:text="${x.id}"></td>
+        <td th:text="${x.firstName}"></td>
+        <td th:text="${x.lastName}"></td>
+        <td th:text="${x.email}"></td>
+    </tr>
+
+    </tbody>
+</table>
 
 </body>
 </html>

@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/students")
 public class StudentController {
 
@@ -18,24 +19,26 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudents(){
+    public String getAllStudents(Model model){
+
         List<Student> students=studentService.getAllStudents();
-        return new ResponseEntity<>(students, HttpStatus.OK);
+        model.addAttribute("students",students);
+        return "students";
     }
     @PostMapping
-    public ResponseEntity<Long> addStudent(@RequestBody Student student){
+    public String addStudent(Student student){
         long studentId=studentService.addStudent(student);
-        return new ResponseEntity<>(studentId, HttpStatus.OK);
+        return "students";
     }
     @PutMapping
-    public ResponseEntity<Long> updateStudent(Student student){
+    public String updateStudent(Student student){
         long studentId=studentService.updateStudent(student);
-        return new ResponseEntity<>(studentId, HttpStatus.OK);
+        return "students";
     }
     @DeleteMapping("/{studentId}")
-    public ResponseEntity<String> deleteStudent(@PathVariable("studentId") long studentId){
+    public String deleteStudent(@PathVariable("studentId") long studentId){
         studentService.deleteStudent(studentId);
-        return new ResponseEntity<>("Deleted", HttpStatus.OK);
+        return "students";
     }
 }
 
