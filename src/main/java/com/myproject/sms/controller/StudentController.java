@@ -12,28 +12,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/students")
 public class StudentController {
 
     @Autowired
     private StudentService studentService;
 
     @GetMapping
+    public String indexPage(){
+        return "/index";
+    }
+
+    @GetMapping("/students")
     public String getAllStudents(Model model){
 
         List<Student> students=studentService.getAllStudents();
         model.addAttribute("students",students);
         return "students";
     }
-    @PostMapping
-    public String addStudent(Student student){
+    @PostMapping("/index")
+    public String addStudent(@ModelAttribute Student student){
+
         long studentId=studentService.addStudent(student);
+        System.out.println(student.getFirstName());
         return "students";
     }
     @PutMapping
     public String updateStudent(Student student){
         long studentId=studentService.updateStudent(student);
-        return "students";
+        return "/students";
     }
     @DeleteMapping("/{studentId}")
     public String deleteStudent(@PathVariable("studentId") long studentId){
