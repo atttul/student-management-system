@@ -17,4 +17,35 @@ public class StudentServiceImpl implements StudentService{
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
+
+    @Override
+    public long addStudent(Student student) {
+        Student stud=Student.builder()
+                .id(student.getId())
+                .firstName(student.getFirstName())
+                .lastName(student.getLastName())
+                .email(student.getEmail())
+                .build();
+        studentRepository.save(stud);
+        return stud.getId();
+    }
+
+    @Override
+    public long updateStudent(Student student) {
+        Student stud=Student.builder()
+                .id(student.getId())
+                .firstName(student.getFirstName())
+                .lastName(student.getLastName())
+                .email(student.getEmail())
+                .build();
+        studentRepository.save(stud);
+
+        return stud.getId();
+    }
+
+    @Override
+    public void deleteStudent(long studentId) {
+        studentRepository.deleteById(studentId);
+
+    }
 }
