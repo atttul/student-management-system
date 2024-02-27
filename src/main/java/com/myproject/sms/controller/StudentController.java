@@ -17,24 +17,30 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping
-    public String indexPage(){
-        return "/index";
-    }
+//    @GetMapping
+//    public String indexPage(){
+//        return "/index";
+//    }
 
     @GetMapping("/students")
     public String getAllStudents(Model model){
-
-        List<Student> students=studentService.getAllStudents();
-        model.addAttribute("students",students);
+        List<Student> studentsList=studentService.getAllStudents();
+        model.addAttribute("students",studentsList);
         return "students";
     }
-    @PostMapping("/index")
-    public String addStudent(@ModelAttribute Student student){
 
-        long studentId=studentService.addStudent(student);
-        System.out.println(student.getFirstName());
-        return "students";
+    //Create a handler method
+    @GetMapping("/students/new")
+    public String handleEmptyStudent(Model model){
+        Student std=new Student();
+        model.addAttribute("studentObject",std);
+        return "create_student";
+    }
+
+    @PostMapping("/students")
+    public String addStudent(@ModelAttribute("studentObject") Student student){
+        studentService.addStudent(student);
+        return "redirect:/students";
     }
     @PutMapping
     public String updateStudent(Student student){
