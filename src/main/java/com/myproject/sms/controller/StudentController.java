@@ -17,11 +17,8 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-//    @GetMapping
-//    public String indexPage(){
-//        return "/index";
-//    }
-
+//----------------------------------------------------------------------------------------------------------------------
+//Getting List of All Students
     @GetMapping("/students")
     public String getAllStudents(Model model){
         List<Student> studentsList=studentService.getAllStudents();
@@ -29,37 +26,48 @@ public class StudentController {
         return "students";
     }
 
-    //Create a handler method
+//----------------------------------------------------------------------------------------------------------------------
+//Adding New Student
     @GetMapping("/students/new")
     public String handleEmptyStudent(Model model){
         Student std=new Student();
         model.addAttribute("studentObject",std);
         return "create_student";
     }
-
     @PostMapping("/students")
     public String addStudent(@ModelAttribute("studentObject") Student student){
         studentService.addStudent(student);
         return "redirect:/students";
     }
-    @PutMapping
-    public String updateStudent(Student student){
-        long studentId=studentService.updateStudent(student);
-        return "/students";
+
+//----------------------------------------------------------------------------------------------------------------------
+//Updating Existing Student
+    @GetMapping("/students/edit/{id}")
+    public String editStudent(@PathVariable("id") long id, Model model){
+        model.addAttribute("studentedit", studentService.getStudentById(id));
+        return "edit_student";
     }
-    @DeleteMapping("/{studentId}")
-    public String deleteStudent(@PathVariable("studentId") long studentId){
+    @PostMapping("/students/{id}")
+    public String updateStudent(@PathVariable("id") long id, @ModelAttribute Student student){
+        //1. Get existing student by id
+        Student existingStudent=studentService.getStudentById(id);
+
+        //2. Setting new values which we get from the user
+        existingStudent.setId(student.getId());
+        existingStudent.setFirstName(student.getFirstName());
+        existingStudent.setLastName(student.getLastName());
+        existingStudent.setEmail(student.getEmail());
+
+        //3. Adding this updated details to DB
+        studentService.updateStudent(existingStudent);
+        return "redirect:/students";
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+//Deleting existing Student
+    @GetMapping("/{id}")
+    public String deleteStudent(@PathVariable("id") long studentId){
         studentService.deleteStudent(studentId);
-        return "students";
+        return "redirect:/students";
     }
 }
-
-
-/*
-{
-        "id": 3,
-        "firstName": "Akash",
-        "lastName": "Atul",
-        "email": "akashtul1@gmail.com"
-}
- */
